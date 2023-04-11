@@ -43,6 +43,14 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () async{
+           var res = await Modular.to.pushNamed('/add');
+           if (res == true) {
+             getData();
+           }
+          }),
     );
   }
 }
