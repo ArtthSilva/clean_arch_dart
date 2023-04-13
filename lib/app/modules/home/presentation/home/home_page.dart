@@ -1,3 +1,4 @@
+import 'package:clean_arch_dart/app/modules/home/domain/models/dtos/user_dto.dart';
 import 'package:clean_arch_dart/app/modules/home/presentation/home/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -34,6 +35,7 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (_, index) {
             final model = controller.contacts[index];
             return   ListTile(
+              onTap: () => _confirmDelete(model),
               leading: CircleAvatar(
                 child: Text(model.name?.substring(0,2).toUpperCase() ?? ''),
               ),
@@ -53,4 +55,36 @@ class _HomePageState extends State<HomePage> {
           }),
     );
   }
+
+ _confirmDelete(UserDto dto) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Remover Contato"),
+          content: Text("Deseja mesmo remover o ${dto.name ?? 'Contato'} "),
+          actions: [
+            ElevatedButton(
+              onPressed: () async {
+                var res = await controller.deleteData(dto.id);
+                if (res.sucess) {
+                  getData();
+                }
+                Modular.to.pop();
+              },
+              child: const Text("Sim"),
+            ),
+            OutlinedButton(
+              onPressed: Modular.to.pop,
+              child: const Text("Não"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
+
+
+ 
